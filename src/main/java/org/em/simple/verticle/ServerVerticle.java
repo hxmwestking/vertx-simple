@@ -11,7 +11,6 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.SessionHandler;
-import io.vertx.ext.web.handler.impl.SessionHandlerImpl;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import io.vertx.ext.web.sstore.SessionStore;
 
@@ -20,15 +19,18 @@ import java.util.Set;
 
 import static io.vertx.core.http.HttpHeaders.*;
 
+/**
+ * @author emperor
+ */
 public class ServerVerticle extends AbstractVerticle {
 
     @Override
-    public void start(Future<Void> startFuture) throws Exception {
+    public void start(Future<Void> startFuture) {
 
         HttpServer server = vertx.createHttpServer();
         server.requestHandler(createRouter());
         server.websocketHandler();
-        server.listen(serverHandler(startFuture));
+        server.listen(8080,serverHandler(startFuture));
     }
 
     private Router createRouter() {
@@ -43,7 +45,7 @@ public class ServerVerticle extends AbstractVerticle {
             ctx.next();
         });
 
-        Set<HttpMethod> method = new HashSet<HttpMethod>();
+        Set<HttpMethod> method = new HashSet<>();
         method.add(HttpMethod.GET);
         method.add(HttpMethod.POST);
         method.add(HttpMethod.OPTIONS);
@@ -60,10 +62,10 @@ public class ServerVerticle extends AbstractVerticle {
         sessionHandler.setNagHttps(false);
         router.route().handler(sessionHandler);
 
-        // 注册地址(前面的可做为拦截器)
+        // register router
         registerInterceptor(router);
         registerRouter(router);
-
+        router.route("/*").handler(ctx-> ctx.response().end("hello"));
         return router;
 
     }
@@ -87,7 +89,7 @@ public class ServerVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void stop(Future<Void> stopFuture) throws Exception {
+    public void stop(Future<Void> stopFuture) {
         stopFuture.complete();
     }
 }

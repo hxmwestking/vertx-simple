@@ -11,6 +11,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'org.em'
@@ -18,7 +19,7 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-def mainClassName = 'org.em.simple.Main'
+mainClassName = 'org.em.simple.Main'
 
 repositories {
     mavenCentral()
@@ -37,10 +38,20 @@ dependencies {
 // Naming and packaging settings for the "shadow jar".
 shadowJar {
     baseName = 'vertx-simple'
-    classifier = 'shadow'
+    classifier = null
 
     manifest {
         attributes 'Main-Class': mainClassName
     }
 
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
