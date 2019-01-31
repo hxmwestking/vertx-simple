@@ -27,7 +27,7 @@ public class ContextUtil {
         return obj;
     }
 
-    public static String getMethodName(String uri){
-        return uri.substring(uri.lastIndexOf("/"));
+    public static String getMethodName(String uri) {
+        return uri.substring(uri.lastIndexOf("/") + 1);
     }
 }

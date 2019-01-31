@@ -1,9 +1,5 @@
 package org.em.simple.verticle;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Log4j2LogDelegateFactory;
 import io.vertx.core.spi.logging.LogDelegate;
@@ -12,8 +8,6 @@ import org.em.simple.annotation.Deploy;
 import org.em.simple.annotation.Service;
 import org.em.simple.base.BaseVerticle;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * @author ximan.huang
@@ -26,13 +20,13 @@ public class UserVerticle extends BaseVerticle {
 
     private static final LogDelegate LOGGER = new Log4j2LogDelegateFactory().createDelegate(UserVerticle.class.getName());
 
-    public UserVerticle(){
-        super(UserVerticle.class.getName());
+    public UserVerticle() {
+        super(UserVerticle.class.getSimpleName());
     }
 
     @Service
-    private JsonObject login(JsonObject body) {
-        LOGGER.info(body.encodePrettily());
+    public JsonObject login(JsonObject body) {
+        LOGGER.info("===== login ===== {}", body.encodePrettily());
         return new JsonObject().put("msg", "ok").put("status", "200");
     }
 

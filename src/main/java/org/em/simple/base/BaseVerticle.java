@@ -1,5 +1,6 @@
 package org.em.simple.base;
 
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -19,13 +20,14 @@ public class BaseVerticle extends AbstractVerticle {
 
     protected String address;
 
-    public BaseVerticle(String address){
+    public BaseVerticle(String address) {
         this.address = address;
     }
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
-        vertx.eventBus().consumer(this.address,this.msgHandler());
+        LOGGER.info("========== Verticle start : {}", this.address);
+        vertx.eventBus().consumer(this.address, this.msgHandler());
     }
 
     @Override
@@ -37,9 +39,16 @@ public class BaseVerticle extends AbstractVerticle {
         return msg -> {
             if (this.getClass().isAnnotationPresent(Ctrl.class)) {
                 try {
-                    Method method = this.getClass().getDeclaredMethod(msg.headers().get("method"), JsonObject.class);
+                    @Nullable String reqMethodName = msg.headers().get("method");
+                    Method method = this.getClass().getDeclaredMethod(reqMethodName, JsonObject.class);
                     if (method.isAnnotationPresent(Service.class)) {
-                        msg.reply(method.invoke(this, msg.body()));
+                        Service service = method.getAnnotation(Service.class);
+                        String annName = service.method().getName();
+                        if (annName.equals(org.em.simple.base.Method.DEFAULT.getName()) || annName.equals(reqMethodName)) {
+                            msg.reply(method.invoke(this, msg.body()));
+                            return;
+                        }
+                        msg.fail(400, "incorrect error");
                     }
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     LOGGER.error(e);
