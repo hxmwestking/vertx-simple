@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface Service {
     String value() default "";
-    Method method() default Method.GET;
+    Method method() default Method.DEFAULT;
 }

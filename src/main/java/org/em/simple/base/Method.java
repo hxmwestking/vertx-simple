@@ -7,6 +7,7 @@ package org.em.simple.base;
  * @date 2019/1/30 17:50
  */
 public enum Method {
+    DEFAULT("DEFAULT"),
     GET("GET"),
     PUT("PUT"),
     POST("POST"),

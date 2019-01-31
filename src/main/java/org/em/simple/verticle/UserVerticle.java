@@ -10,38 +10,31 @@ import io.vertx.core.spi.logging.LogDelegate;
 import org.em.simple.annotation.Ctrl;
 import org.em.simple.annotation.Deploy;
 import org.em.simple.annotation.Service;
+import org.em.simple.base.BaseVerticle;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
- * @description user
  * @author ximan.huang
+ * @description user
  * @date 2019/1/30 15:11
  */
 @Deploy
 @Ctrl
-public class UserVerticle extends AbstractVerticle {
+public class UserVerticle extends BaseVerticle {
 
     private static final LogDelegate LOGGER = new Log4j2LogDelegateFactory().createDelegate(UserVerticle.class.getName());
 
-    @Override
-    public void start(Future<Void> startFuture) throws Exception {
-
-        vertx.eventBus().consumer(UserVerticle.class.getName(), msgHandler());
-    }
-
-    private Handler<Message<JsonObject>> msgHandler() {
-        return msg->{
-           msg.reply(login(msg.body()));
-        };
+    public UserVerticle(){
+        super(UserVerticle.class.getName());
     }
 
     @Service
-    private JsonObject login(JsonObject body){
+    private JsonObject login(JsonObject body) {
         LOGGER.info(body.encodePrettily());
-        return new JsonObject().put("msg","ok").put("status","200");
+        return new JsonObject().put("msg", "ok").put("status", "200");
     }
 
-    @Override
-    public void stop(Future<Void> stopFuture) throws Exception {
-        super.stop(stopFuture);
-    }
+
 }

@@ -18,6 +18,7 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import io.vertx.ext.web.sstore.SessionStore;
 import org.em.simple.annotation.Deploy;
+import org.em.simple.utils.RouterUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -73,10 +74,7 @@ public class ServerVerticle extends AbstractVerticle {
         // register mainRouter
         registerInterceptor(mainRouter);
         registerRouter(mainRouter);
-        mainRouter.route("/*").handler(ctx -> {
-            ctx.response().putHeader("content-type", "text/html")
-                    .end("Hello World!");
-        });
+        RouterUtil.commonHandler(mainRouter);
         return mainRouter;
 
     }
@@ -105,10 +103,6 @@ public class ServerVerticle extends AbstractVerticle {
                 }
             });
         });
-        mainRouter.route("/em/*").handler(ctx -> {
-            ctx.response().putHeader("em", "emperor");
-            ctx.next();
-        });
     }
 
     private void registerRouter(Router mainRouter) {
@@ -117,7 +111,7 @@ public class ServerVerticle extends AbstractVerticle {
             ctx.response().putHeader("content-type", "text/plain").end("Hello EM");
         });
         mainRouter.mountSubRouter("/em/sub", subRouter);
-
+        RouterUtil.registerRouter(vertx,mainRouter);
 
     }
 

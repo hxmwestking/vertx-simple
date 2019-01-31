@@ -25,7 +25,7 @@ public class AuthVerticle extends AbstractVerticle {
                 msg.fail(400, "Illegal Argument");
             } else {
                 if (ADMIN.equals(body.getString(TOKEN))) {
-                    msg.replyAddress();
+                    msg.reply("");
                 } else {
                     msg.fail(203, "Permission denied");
                 }
