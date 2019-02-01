@@ -6,7 +6,7 @@ package org.em.simple.base;
  * @author ximan.huang
  * @date 2019/1/30 17:50
  */
-public enum Method {
+public enum HttpMethod {
     DEFAULT("DEFAULT"),
     GET("GET"),
     PUT("PUT"),
@@ -17,7 +17,7 @@ public enum Method {
     ;
     private String name;
 
-    Method(String name){
+    HttpMethod(String name){
         this.name = name;
     }
 

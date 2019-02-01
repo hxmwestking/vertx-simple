@@ -1,6 +1,6 @@
 package org.em.simple.annotation;
 
-import org.em.simple.base.Method;
+import org.em.simple.base.HttpMethod;
 
 import java.lang.annotation.*;
 
@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface Service {
     String value() default "";
-    Method method() default Method.DEFAULT;
+    HttpMethod method() default HttpMethod.DEFAULT;
 }

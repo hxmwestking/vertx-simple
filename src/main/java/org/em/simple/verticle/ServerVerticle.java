@@ -73,7 +73,7 @@ public class ServerVerticle extends AbstractVerticle {
 
         // register mainRouter
         registerInterceptor(mainRouter);
-        registerRouter(mainRouter);
+//        registerRouter(mainRouter);
         RouterUtil.commonHandler(mainRouter);
         return mainRouter;
 
@@ -111,7 +111,7 @@ public class ServerVerticle extends AbstractVerticle {
             ctx.response().putHeader("content-type", "text/plain").end("Hello EM");
         });
         mainRouter.mountSubRouter("/em/sub", subRouter);
-        RouterUtil.registerRouter(vertx,mainRouter);
+        RouterUtil.registerRouter(vertx, mainRouter);
 
     }
 

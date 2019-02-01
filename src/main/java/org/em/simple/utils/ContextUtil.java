@@ -5,6 +5,7 @@ import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
 
 import static org.em.simple.base.Constant.PREFIX;
+import static org.em.simple.base.Constant.URI_FLAG;
 
 /**
  * @author em
@@ -28,6 +29,9 @@ public class ContextUtil {
     }
 
     public static String getMethodName(String uri) {
-        return uri.substring(uri.lastIndexOf("/") + 1);
+        if (uri.contains(URI_FLAG)){
+            return uri.substring(uri.indexOf("/",1),uri.indexOf(URI_FLAG));
+        }
+        return uri.substring(uri.indexOf("/",1));
     }
 }

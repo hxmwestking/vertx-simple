@@ -81,7 +81,7 @@ public class RouterUtil {
         }
     }
 
-    private static String addPrefixAndSuffix(String path, String prefix, String suffix) {
+    public static String addPrefixAndSuffix(String path, String prefix, String suffix) {
         if (path.startsWith(prefix)) {
             if (path.endsWith(suffix)) {
                 return path;
@@ -103,7 +103,8 @@ public class RouterUtil {
         return ctx -> {
             String uri = ctx.request().uri();
             ctx.vertx().eventBus().<JsonObject>send(getAddress(uri), param(ctx),
-                    new DeliveryOptions().addHeader("method", getMethodName(uri)), ar -> {
+                    new DeliveryOptions().addHeader("method", getMethodName(uri)).
+                            addHeader("rawMethod", ctx.request().rawMethod()), ar -> {
                         if (ar.failed()) {
                             ctx.response().setStatusCode(500);
                             ctx.fail(ar.cause());
